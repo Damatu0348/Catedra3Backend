@@ -12,7 +12,7 @@ namespace api.Src.Data
     {
         private static Random random = new Random();
 
-        public static async void Initialize(IServiceProvider serviceProvider)
+        public static async Task Initialize(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -20,7 +20,7 @@ namespace api.Src.Data
                 var context = services.GetRequiredService<ApplicationDBContext>();
                 var userManager = services.GetRequiredService<UserManager<Usuario>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                
+
                 var faker = new Faker();
 
                 List<IdentityRole> roles = new List<IdentityRole>
@@ -30,7 +30,7 @@ namespace api.Src.Data
                         Id = "1",
                         Name = "User",
                         NormalizedName = "USER",
-                    }
+                    },
                 };
 
                 foreach (var role in roles)
@@ -41,58 +41,44 @@ namespace api.Src.Data
                         context.SaveChanges();
                     }
                 }
+
                 if (!userManager.Users.Any())
                 {
                     for (int i = 0; i < 10; i++)
                     {
-                        faker = new Faker();
-
                         var usuarioSedder = new Usuario
                         {
-                            UserName = faker.Person.UserName,
                             Email = faker.Person.Email,
-                            Password = GenerarContraseñaAleatoria(),
+                            UserName = faker.Person.Email,
                         };
 
-                        var createUser = await userManager.CreateAsync(usuarioSedder);
+                        var createUser = await userManager.CreateAsync(
+                            usuarioSedder,
+                            "Password1234"
+                        );
                         if (!createUser.Succeeded)
                         {
+                            foreach (var error in createUser.Errors)
+                            {
+                                Console.WriteLine($"Error al crear usuario: {error.Description}");
+                            }
                             throw new Exception("Error al crear el usuario");
                         }
 
-                        var roleResult = userManager.AddToRoleAsync(usuarioSedder, "User");
-
-                        if (roleResult.Result.Succeeded)
+                        var roleResult = await userManager.AddToRoleAsync(usuarioSedder, "User");
+                        if (!roleResult.Succeeded)
                         {
-                            Console.WriteLine(
-                                $"Usuario {usuarioSedder.UserName} creado exitosamente"
-                            );
-                            context.SaveChanges();
-                        }
-                        else
-                        {
+                            foreach (var error in roleResult.Errors)
+                            {
+                                Console.WriteLine($"Error al asignar rol: {error.Description}");
+                            }
                             throw new Exception("Error al asignar rol al usuario");
                         }
-                    }
-                    context.SaveChanges();
-                }
-                context.SaveChanges();
-            }
-        }
-    
 
-    private static string GenerarContraseñaAleatoria()
-        {
-            var random = new Random();
-            const string caracteres =
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            int longitudContraseña = random.Next(8, 21); // Generar una longitud entre 8 y 20 caracteres
-            return new string(
-                Enumerable
-                    .Repeat(caracteres, longitudContraseña)
-                    .Select(s => s[random.Next(s.Length)])
-                    .ToArray()
-            );
+                        Console.WriteLine($"Usuario {usuarioSedder.UserName} creado exitosamente");
+                    }
+                }
+            }
         }
     }
 }

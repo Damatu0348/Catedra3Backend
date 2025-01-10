@@ -7,16 +7,5 @@ using Microsoft.AspNetCore.Identity;
 
 namespace api.Src.Models
 {
-    public class Usuario : IdentityUser
-    {
-        [EmailAddress(ErrorMessage = "Correo electrónico inválido.")]
-        public new string Email { get; set; } = string.Empty;
-
-        [Required]
-        [RegularExpression(
-            @"^[a-zA-Z0-9]{8,20}$",
-            ErrorMessage = "La contraseña debe ser alfanumérica y tener entre 8 y 20 caracteres."
-        )]
-        public string Password { get; set; } = string.Empty;
-    }
+    public class Usuario : IdentityUser { }
 }

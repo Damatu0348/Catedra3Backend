@@ -4,14 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using api.Src.Data;
 
 #nullable disable
 
 namespace api.Src.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250108235325_initDataSeeder")]
-    partial class initDataSeeder
+    [Migration("20250110001332_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -147,7 +148,7 @@ namespace api.Src.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("api.Properties.Src.Models.Post", b =>
+            modelBuilder.Entity("api.Src.Models.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -174,7 +175,7 @@ namespace api.Src.Data.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("api.Properties.Src.Models.Usuario", b =>
+            modelBuilder.Entity("api.Src.Models.Usuario", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -187,7 +188,6 @@ namespace api.Src.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -206,10 +206,6 @@ namespace api.Src.Data.Migrations
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
@@ -254,7 +250,7 @@ namespace api.Src.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("api.Properties.Src.Models.Usuario", null)
+                    b.HasOne("api.Src.Models.Usuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -263,7 +259,7 @@ namespace api.Src.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("api.Properties.Src.Models.Usuario", null)
+                    b.HasOne("api.Src.Models.Usuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -278,7 +274,7 @@ namespace api.Src.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("api.Properties.Src.Models.Usuario", null)
+                    b.HasOne("api.Src.Models.Usuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -287,16 +283,16 @@ namespace api.Src.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("api.Properties.Src.Models.Usuario", null)
+                    b.HasOne("api.Src.Models.Usuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("api.Properties.Src.Models.Post", b =>
+            modelBuilder.Entity("api.Src.Models.Post", b =>
                 {
-                    b.HasOne("api.Properties.Src.Models.Usuario", "Usuario")
+                    b.HasOne("api.Src.Models.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId");
 
