@@ -11,6 +11,7 @@ namespace api.Src.Models
         public string Titulo { get; set; } = string.Empty;
         public DateTime FechaPublicacion { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
+        public int UsuarioId { get; set; }
         public Usuario Usuario { get; set; } = null!;
     }
 }

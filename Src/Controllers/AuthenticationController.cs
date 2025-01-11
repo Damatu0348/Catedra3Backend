@@ -41,7 +41,7 @@ namespace api.Src.Controllers
         /// </summary>
         /// <param name="registerDto">el modelo de registro del usuario a ingresar</param>
         /// <returns>Ok si se registro exitosamente, error 500 de lo contrario</returns>
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             try

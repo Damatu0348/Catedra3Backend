@@ -12,6 +12,7 @@ namespace api.Src.Data
     {
         public ApplicationDBContext(DbContextOptions dbContextOptions)
             : base(dbContextOptions) { }
-        public DbSet<Post> Posts {get; set;} = null!;
+
+        public DbSet<Post> Posts { get; set; } = null!;
     }
 }
